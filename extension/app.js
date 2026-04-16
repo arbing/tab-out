@@ -2358,6 +2358,53 @@ document.addEventListener('blur', (e) => {
   }, 150);
 }, true);
 
+// ---- Open tabs search — filter domain cards as user types ----
+document.addEventListener('input', (e) => {
+  if (e.target.id !== 'openTabsSearch') return;
+
+  const q = e.target.value.trim().toLowerCase();
+  const missionsEl = document.getElementById('openTabsMissions');
+  if (!missionsEl) return;
+
+  const cards = missionsEl.querySelectorAll('.mission-card');
+
+  if (q.length === 0) {
+    // Reset — remove all search classes and restore overflow state
+    missionsEl.classList.remove('is-searching');
+    cards.forEach(card => {
+      card.classList.remove('search-hidden');
+      card.querySelectorAll('.page-chip').forEach(chip => chip.classList.remove('search-hidden'));
+    });
+    return;
+  }
+
+  missionsEl.classList.add('is-searching');
+
+  cards.forEach(card => {
+    const domainLabel = (card.querySelector('.mission-name')?.textContent || '').toLowerCase();
+    // If the domain/group name itself matches, show all chips in this card
+    if (domainLabel.includes(q)) {
+      card.classList.remove('search-hidden');
+      card.querySelectorAll('.page-chip:not(.page-chip-overflow)').forEach(chip => chip.classList.remove('search-hidden'));
+      return;
+    }
+
+    let anyVisible = false;
+    card.querySelectorAll('.page-chip:not(.page-chip-overflow)').forEach(chip => {
+      const title = (chip.title || chip.querySelector('.chip-text')?.textContent || '').toLowerCase();
+      const url   = (chip.dataset.tabUrl || '').toLowerCase();
+      if (title.includes(q) || url.includes(q)) {
+        chip.classList.remove('search-hidden');
+        anyVisible = true;
+      } else {
+        chip.classList.add('search-hidden');
+      }
+    });
+
+    card.classList.toggle('search-hidden', !anyVisible);
+  });
+});
+
 // ---- Archive search — filter archived items as user types ----
 document.addEventListener('input', async (e) => {
   if (e.target.id !== 'archiveSearch') return;
@@ -2404,6 +2451,29 @@ document.addEventListener('keydown', async (e) => {
     await renderDashboard();
   }
 });
+
+document.addEventListener('keydown', (e) => {
+  const search = document.getElementById('openTabsSearch');
+  if (!search) return;
+
+  // '/' — focus the search bar (when not already typing in an input)
+  if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    e.preventDefault();
+    search.focus();
+    search.select();
+    return;
+  }
+
+  // Escape — clear and blur search
+  if (e.key === 'Escape' && document.activeElement === search) {
+    search.value = '';
+    search.dispatchEvent(new Event('input'));
+    search.blur();
+  }
+});
+
 
 /* ----------------------------------------------------------------
    INITIALIZE
