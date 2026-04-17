@@ -1585,7 +1585,7 @@ async function renderDomainView(realTabs) {
  * 1. Chrome groups as cards (with color accent bars)
  * 2. Ungrouped tabs as a lightweight "Not grouped" chip cluster
  */
-async function renderGroupView(viewMode) {
+async function renderGroupView() {
   const openTabsSection      = document.getElementById('openTabsSection');
   const openTabsMissionsEl = document.getElementById('openTabsMissions');
   const openTabsSectionCount = document.getElementById('openTabsSectionCount');
@@ -1804,7 +1804,7 @@ async function renderStaticDashboard() {
 
   // --- Branch on view mode ---
   if (effectiveView === 'group') {
-    await renderGroupView(effectiveView);
+    await renderGroupView();
   } else {
     await renderDomainView(realTabs);
   }
@@ -1832,7 +1832,7 @@ async function renderStaticDashboard() {
     const stored = await loadViewMode();
     const view   = (tabGroupsList.length === 0) ? 'domain' : stored;
     if (view === 'group') {
-      await renderGroupView(view);
+      await renderGroupView();
     } else {
       await renderDomainView(getRealTabs());
     }
