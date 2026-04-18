@@ -73,6 +73,10 @@ body.has-bing-bg::before {
   background-color: rgba(248, 245, 240, 0.68);
 }
 
+[data-theme="dark"] body.has-bing-bg::before {
+  background-color: rgba(26, 26, 31, 0.72);
+}
+
 .bing-credit {
   font-size: 10px;
   color: var(--muted);
@@ -1115,7 +1119,7 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
 }
 
 .update-banner-dismiss:hover {
-  background: rgba(26, 22, 19, 0.06);
+  background: var(--shadow);
   color: var(--ink);
 }
 
@@ -1576,7 +1580,7 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
 .view-toggle {
   display: inline-flex;
   gap: 2px;
-  background: var(--bg);
+  background: var(--paper);
   border: 1px solid rgba(154, 145, 138, 0.15);
   border-radius: 20px;
   padding: 2px;
@@ -1597,7 +1601,7 @@ footer { animation: fadeUp 0.5s ease 0.65s both; }
 
 .toggle-pill.active {
   background: var(--ink);
-  color: var(--bg);
+  color: var(--paper);
 }
 
 .toggle-pill:hover:not(.active) {
