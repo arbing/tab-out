@@ -74,7 +74,8 @@ body.has-bing-bg::before {
 }
 
 [data-theme="dark"] body.has-bing-bg::before {
-  background-color: rgba(26, 26, 31, 0.72);
+  background-color: rgba(26, 26, 31, 0.82);
+  opacity: 1; /* override the 0.015 noise-reduction rule above */
 }
 
 .bing-credit {
